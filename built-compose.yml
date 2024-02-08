@@ -1,5 +1,8 @@
 version: "3.9"
+
+# Define the services that make up the application
 services:
+  # PostgreSQL service
   postgres:
     image: postgres:latest
     environment:
@@ -10,6 +13,7 @@ services:
     volumes:
       - app-db:/var/lib/postgresql/data
 
+  # Main app service
   app:
     image: tpfinal-app:latest
     environment:
@@ -23,19 +27,21 @@ services:
       - "3005:3005"
     deploy:
       mode: replicated
-      replicas: 3
-      resources:
+      replicas: 3 # Set the number of replicas for the service
+      resources: # Set the resource limits and reservations for the service
         limits:
-          cpus: "0.50"
-          memory: 50M
+          cpus: "0.50" # Set the CPU limit for the service
+          memory: 50M # Set the memory limit for the service
         reservations:
-          cpus: "0.25"
-          memory: 20M
+          cpus: "0.25" # Set the CPU reservation for the service
+          memory: 20M # Set the memory reservation for the service
       restart_policy:
-        condition: on-failure
-        delay: 5s
+        condition: on-failure # Set the restart condition for the service
+        delay: 5s # Set the delay before restarting the service
         max_attempts: 3
         window: 120s
 
+# Define the volumes used by the services
 volumes:
   app-db:
+    # Persistent volume for PostgreSQL data
